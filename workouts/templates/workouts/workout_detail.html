@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{% url 'workouts:home' %}" class="btn btn-secondary mb-3">← Back to Workouts</a>
+
+<div class="card">
+    <div class="card-body">
+        <h2>{{ workout.name }}</h2>
+        <p class="text-muted">Date: {{ workout.date }}</p>
+
+        {% for muscle_name, exercises in exercises_by_muscle.items %}
+        <div class="mb-3">
+            <h5>{{ muscle_name }}</h5>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Sets</th>
+                        <th>Reps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exercise in exercises %}
+                    <tr>
+                        <td>{{ exercise.name }}</td>
+                        <td>{{ exercise.sets }}</td>
+                        <td>{{ exercise.reps }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        {% if workout.notes %}
+        <p><strong>Notes:</strong> {{ workout.notes }}</p>
+        {% endif %}
+
+        <a href="{% url 'workouts:edit_workout' workout.id %}" class="btn btn-primary">Edit</a>
+        <a href="{% url 'workouts:delete_workout' workout.id %}" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+{% endblock %}

@@ -128,7 +128,7 @@ else:
 AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'workouts:home'
+LOGIN_REDIRECT_URL = 'users:profile'
 LOGOUT_REDIRECT_URL = 'users:login'
 
 AUTH_PASSWORD_VALIDATORS = [

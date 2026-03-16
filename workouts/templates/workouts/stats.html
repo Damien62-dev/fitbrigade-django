@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Workout Statistics</h2>
+<br>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h3 class="text-primary">{{ total_workouts }}</h3>
+            <p>Total Workouts</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h3 class="text-primary">{{ most_trained }}</h3>
+            <p>Most Trained Muscle</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h3 class="text-primary">{{ least_trained }}</h3>
+            <p>Least Trained Muscle</p>
+        </div>
+    </div>
+</div>
+
+<h4>Muscle Group Frequency</h4>
+<div class="card">
+    <div class="card-body">
+        {% for muscle, count in muscle_stats.items %}
+        <div class="d-flex justify-content-between border-bottom py-2">
+            <span>{{ muscle }}</span>
+            <strong class="text-primary">{{ count }} times</strong>
+        </div>
+        {% empty %}
+        <p>No workout data yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

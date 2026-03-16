@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Goals</h2>
+    <a href="{% url 'goals:create_goal' %}" class="btn btn-primary">Create New Goal</a>
+</div>
+
+{% if goals %}
+<div class="row">
+    {% for goal in goals %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ goal.name }}</h5>
+                <p class="text-muted">Deadline: {{ goal.deadline|default:"No deadline" }}</p>
+                <div class="mb-2">
+                    {% if goal.exercise %}
+                    <span class="badge bg-primary">{{ goal.exercise.name }}</span>
+                    {% endif %}
+                    {% if goal.target_weight %}
+                    <span class="badge bg-secondary">{{ goal.target_weight }}kg</span>
+                    {% endif %}
+                    {% if goal.target_reps %}
+                    <span class="badge bg-secondary">{{ goal.target_reps }} reps</span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'goals:goal_detail' goal.id %}" class="btn btn-secondary btn-sm">View</a>
+                <a href="{% url 'goals:delete_goal' goal.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center p-5">
+    <p>No goals yet. Start by creating your first goal!</p>
+    <a href="{% url 'goals:create_goal' %}" class="btn btn-primary">Create Goal</a>
+</div>
+{% endif %}
+{% endblock %}

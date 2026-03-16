@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Workouts</h2>
+    <a href="{% url 'workouts:create_workout' %}" class="btn btn-primary">Create New Workout</a>
+</div>
+
+{% if workouts %}
+<div class="row">
+    {% for workout in workouts %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ workout.name }}</h5>
+                <p class="text-muted">{{ workout.date }}</p>
+                <div class="mb-2">
+                    {% for mg in workout.muscle_groups.all %}
+                    <span class="badge bg-primary">{{ mg.name }}</span>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'workouts:workout_detail' workout.id %}" class="btn btn-secondary btn-sm">View</a>
+                <a href="{% url 'workouts:delete_workout' workout.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center p-5">
+    <p>No workouts yet. Start by creating your first workout!</p>
+    <a href="{% url 'workouts:create_workout' %}" class="btn btn-primary">Create Workout</a>
+</div>
+{% endif %}
+{% endblock %}

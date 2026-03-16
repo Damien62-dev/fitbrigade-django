@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{% url 'goals:goals_list' %}" class="btn btn-secondary mb-3">← Back to Goals</a>
+
+<div class="card">
+    <div class="card-body">
+        <h2>{{ goal.name }}</h2>
+        <p class="text-muted">Deadline: {{ goal.deadline|default:"No deadline" }}</p>
+
+        <div class="mb-3">
+            {% if goal.exercise %}
+            <p><strong>Exercise:</strong> {{ goal.exercise.name }} ({{ goal.exercise.muscle_group.name }})</p>
+            {% endif %}
+            {% if goal.target_weight %}
+            <p><strong>Target Weight:</strong> {{ goal.target_weight }} kg</p>
+            {% endif %}
+            {% if goal.target_reps %}
+            <p><strong>Target Reps:</strong> {{ goal.target_reps }}</p>
+            {% endif %}
+            {% if not goal.exercise and not goal.target_weight and not goal.target_reps %}
+            <p><em>General fitness goal</em></p>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <h5>Description</h5>
+            <p>{{ goal.notes }}</p>
+        </div>
+
+        <a href="{% url 'goals:edit_goal' goal.id %}" class="btn btn-primary">Edit</a>
+        <a href="{% url 'goals:delete_goal' goal.id %}" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+{% endblock %}
