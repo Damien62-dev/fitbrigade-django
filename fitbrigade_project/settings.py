@@ -8,6 +8,7 @@ Configured for local development and Render.com deployment.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 load_dotenv()
 
@@ -175,3 +176,7 @@ USE_TZ = True
 # ─── Misc ─────────────────────────────────────────────────────────────────────
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}

@@ -4,7 +4,8 @@ from . import views
 app_name = 'workouts'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.index, name='index'),
+    path('workouts/', views.home, name='home'),
     path('workout/<int:workout_id>/', views.workout_detail, name='workout_detail'),
     path('create/', views.create_workout, name='create_workout'),
     path('edit/<int:workout_id>/', views.edit_workout, name='edit_workout'),

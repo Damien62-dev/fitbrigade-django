@@ -1,99 +1,92 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Workout - FitBrigade{% endblock %}
+
 {% block content %}
+<a href="{% url 'workouts:home' %}" class="back-link">← Back to Workouts</a>
+<br><br>
+
 <h2>Create New Workout</h2>
 <br>
-<form method="POST">
+
+<form method="POST" id="workoutForm">
     {% csrf_token %}
+
     <div class="mb-3">
-        <label class="form-label">Workout Name</label>
-        <input type="text" name="name" class="form-control" required placeholder="e.g., Leg Day">
+        <label for="name" class="form-label fw-bold">Workout Name</label>
+        <input type="text" id="name" name="name" class="form-control" required placeholder="e.g., Leg Day">
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Date</label>
-        <input type="date" name="date" class="form-control" required>
+        <label for="date" class="form-label fw-bold">Date</label>
+        <input type="date" id="date" name="date" class="form-control" required>
     </div>
 
     <fieldset class="mb-3">
         <legend>Select Muscle Groups</legend>
-        <div class="row">
-            {% for mg in muscle_groups %}
-            <div class="col-md-3 mb-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="muscle_groups" value="{{ mg.name }}"
-                        id="mg_{{ mg.name }}" onchange="toggleExercises('{{ mg.name }}', event)">
-                    <label class="form-check-label" for="mg_{{ mg.name }}">{{ mg.name }}</label>
-                </div>
-            </div>
+        <div class="muscle-grid">
+            {% for muscle_name, exercises in all_exercises.items %}
+            <label class="muscle-grid-label">
+                <input type="checkbox" name="muscle_groups" value="{{ muscle_name }}"
+                    onchange="toggleExercises('{{ muscle_name }}', event)">
+                {{ muscle_name }}
+            </label>
             {% endfor %}
         </div>
+        <p id="muscleCount" class="mt-2 text-muted">0 muscle groups selected</p>
     </fieldset>
 
-    {% for muscle, exercise_list in all_exercises.items %}
-    <div id="exercises_{{ muscle }}" style="display:none;" class="mb-3">
+    {% for muscle_name, exercises in all_exercises.items %}
+    <div id="exercises_{{ muscle_name }}" class="exercise-section mb-3" style="display: none;">
         <fieldset>
-            <legend>Exercises for {{ muscle }}</legend>
-            {% for exercise in exercise_list %}
-            <div class="mb-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="exercises_{{ muscle }}"
-                        value="{{ exercise.name }}" id="ex_{{ muscle }}_{{ exercise.name }}"
-                        onchange="toggleExerciseDetails('{{ muscle }}', '{{ exercise.name }}', event)">
-                    <label class="form-check-label" for="ex_{{ muscle }}_{{ exercise.name }}">
-                        {{ exercise.name }}
+            <legend>Select Exercises for {{ muscle_name }}</legend>
+            <div class="exercise-list-detailed">
+                {% for exercise in exercises %}
+                <div class="exercise-item">
+                    <label class="exercise-checkbox">
+                        <input type="checkbox" name="exercises_{{ muscle_name }}" value="{{ exercise.name }}"
+                            onchange="toggleExerciseDetails('{{ muscle_name }}', '{{ exercise.name }}', event)">
+                        <strong>{{ exercise.name }}</strong>
                     </label>
+                    <div id="details_{{ muscle_name }}_{{ exercise.name }}" class="exercise-details"
+                        style="display: none;">
+                        <label>Sets:</label>
+                        <select name="sets_{{ muscle_name }}_{{ exercise.name }}">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <label>Reps:</label>
+                        <select name="reps_{{ muscle_name }}_{{ exercise.name }}">
+                            <option value="1-3">1-3</option>
+                            <option value="4-6">4-6</option>
+                            <option value="6-8">6-8</option>
+                            <option value="8-10" selected>8-10</option>
+                            <option value="10-12">10-12</option>
+                            <option value="12-15">12-15</option>
+                            <option value="15-20">15-20</option>
+                            <option value="20+">20+</option>
+                        </select>
+                    </div>
                 </div>
-                <div id="details_{{ muscle }}_{{ exercise.name }}" style="display:none;" class="ms-4 mt-1">
-                    <label>Sets:</label>
-                    <select name="sets_{{ muscle }}_{{ exercise.name }}"
-                        class="form-select form-select-sm d-inline w-auto">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                    <label class="ms-2">Reps:</label>
-                    <select name="reps_{{ muscle }}_{{ exercise.name }}"
-                        class="form-select form-select-sm d-inline w-auto">
-                        <option value="1-3">1-3</option>
-                        <option value="4-6">4-6</option>
-                        <option value="6-8">6-8</option>
-                        <option value="8-10" selected>8-10</option>
-                        <option value="10-12">10-12</option>
-                        <option value="12-15">12-15</option>
-                        <option value="15-20">15-20</option>
-                        <option value="20+">20+</option>
-                    </select>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </fieldset>
     </div>
     {% endfor %}
 
     <div class="mb-3">
-        <label class="form-label">Notes (optional)</label>
-        <textarea name="notes" class="form-control" rows="3"></textarea>
+        <label for="notes" class="form-label fw-bold">Notes (optional)</label>
+        <textarea id="notes" name="notes" class="form-control" rows="4"
+            placeholder="Add any notes about this workout..."></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Workout</button>
-    <a href="{% url 'workouts:home' %}" class="btn btn-secondary">Cancel</a>
+    <div class="d-flex gap-2 mt-3">
+        <a href="{% url 'workouts:home' %}" class="btn-secondary">Cancel</a>
+        <button type="submit" class="btn-primary">Save Workout</button>
+    </div>
 </form>
-
-<script>
-    function toggleExercises(muscle, event) {
-        const section = document.getElementById('exercises_' + muscle);
-        section.style.display = event.target.checked ? 'block' : 'none';
-        if (!event.target.checked) {
-            section.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            section.querySelectorAll('[id^="details_"]').forEach(d => d.style.display = 'none');
-        }
-    }
-
-    function toggleExerciseDetails(muscle, exercise, event) {
-        const details = document.getElementById('details_' + muscle + '_' + exercise);
-        details.style.display = event.target.checked ? 'block' : 'none';
-    }
-</script>
 {% endblock %}

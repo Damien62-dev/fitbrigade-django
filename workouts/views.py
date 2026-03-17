@@ -3,6 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Workout, MuscleGroup, Exercise, WorkoutMuscleGroup, WorkoutExercise
 
+def index(request):
+    if request.user.is_authenticated:
+        return redirect('workouts:home')
+    return render(request, 'workouts/index.html')
+
 
 @login_required
 def home(request):

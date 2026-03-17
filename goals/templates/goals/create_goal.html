@@ -1,26 +1,35 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Goal - FitBrigade{% endblock %}
+
 {% block content %}
+<a href="{% url 'goals:goals_list' %}" class="back-link">← Back to Goals</a>
+<br><br>
+
 <h2>Create New Goal</h2>
 <br>
-<form method="POST">
+
+<form method="POST" id="goalForm">
     {% csrf_token %}
+
     <div class="mb-3">
-        <label class="form-label">Name *</label>
-        <input type="text" name="name" class="form-control" required placeholder="e.g., Do my first pull-up">
+        <label for="name" class="form-label fw-bold">Name *</label>
+        <input type="text" id="name" name="name" class="form-control" required placeholder="e.g., Do my first pull-up">
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Deadline (optional)</label>
-        <input type="date" name="deadline" class="form-control">
+        <label for="deadline" class="form-label fw-bold">Deadline (optional)</label>
+        <input type="date" id="deadline" name="deadline" class="form-control">
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Related Exercise (optional)</label>
-        <select name="exercise" class="form-select">
+        <label for="exercise" class="form-label fw-bold">Related Exercise (optional)</label>
+        <select id="exercise" name="exercise" class="form-select">
             <option value="">-- Not exercise-specific --</option>
-            {% for muscle, exercise_list in all_exercises.items %}
-            <optgroup label="{{ muscle }}">
-                {% for exercise in exercise_list %}
+            {% for muscle_name, exercises in all_exercises.items %}
+            <optgroup label="{{ muscle_name }}">
+                {% for exercise in exercises %}
                 <option value="{{ exercise.id }}">{{ exercise.name }}</option>
                 {% endfor %}
             </optgroup>
@@ -29,21 +38,25 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Target Weight (kg) (optional)</label>
-        <input type="number" name="target_weight" class="form-control" step="0.5" placeholder="e.g., 100">
+        <label for="target_weight" class="form-label fw-bold">Target Weight (kg) (optional)</label>
+        <input type="number" id="target_weight" name="target_weight" class="form-control" step="0.5"
+            placeholder="e.g., 100">
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Target Reps (optional)</label>
-        <input type="number" name="target_reps" class="form-control" min="1" placeholder="e.g., 5">
+        <label for="target_reps" class="form-label fw-bold">Target Reps (optional)</label>
+        <input type="number" id="target_reps" name="target_reps" class="form-control" min="1" placeholder="e.g., 5">
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Description / Notes *</label>
-        <textarea name="notes" class="form-control" rows="4" required placeholder="Describe your goal..."></textarea>
+        <label for="notes" class="form-label fw-bold">Description / Notes *</label>
+        <textarea id="notes" name="notes" class="form-control" rows="4" required
+            placeholder="Describe your goal and what success looks like..."></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Goal</button>
-    <a href="{% url 'goals:goals_list' %}" class="btn btn-secondary">Cancel</a>
+    <div class="d-flex gap-2 mt-3">
+        <a href="{% url 'goals:goals_list' %}" class="btn-secondary">Cancel</a>
+        <button type="submit" class="btn-primary">Save Goal</button>
+    </div>
 </form>
 {% endblock %}

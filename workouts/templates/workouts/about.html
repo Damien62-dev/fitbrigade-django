@@ -1,26 +1,70 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About - FitBrigade{% endblock %}
+
 {% block content %}
 <h2>About FitBrigade</h2>
 <br>
 
-<section class="mb-4">
-    <h4>The Concept</h4>
-    <p>FitBrigade is a workout tracking application that helps fitness enthusiasts plan and track their workouts. Built
-        with Django and PostgreSQL.</p>
+<section>
+    <h3>The Concept</h3>
+    <p>FitBrigade is a web application designed to help fitness enthusiasts effectively plan and track their workouts.
+        Focused on complete customization, it ensures you create a workout that's perfect for you.
+        By creating your first workout, you join the fitness brigade; aka the "FitBrigade".
+    </p>
 </section>
+<br>
 
-<section class="mb-4">
-    <h4>Technologies Used</h4>
+<section>
+    <h3>What's New in v3.0</h3>
     <ul>
-        <li><strong>Backend:</strong> Django 5.0 (Python)</li>
-        <li><strong>Database:</strong> PostgreSQL / SQLite</li>
-        <li><strong>Frontend:</strong> HTML5, Bootstrap 5, JavaScript</li>
-        <li><strong>Hosting:</strong> Render.com</li>
+        <li><strong>Django Migration:</strong> Fully migrated from Flask to Django with PostgreSQL</li>
+        <li><strong>User Authentication:</strong> Register, login, and manage your own workouts and goals</li>
+        <li><strong>Goals Feature:</strong> Set and track strength goals for specific exercises</li>
+        <li><strong>Target Tracking:</strong> Define weight and rep targets with optional deadlines</li>
     </ul>
 </section>
+<br>
 
-<section class="mb-4">
-    <h4>About Me</h4>
-    <p>My name is Damien, I'm a Full Stack development student at UCD Professional Academy in Dublin.</p>
+<section>
+    <h3>Why This App?</h3>
+    <p>Passionate about running, and more recently weight training, I understand the complexity of creating a varied
+        training program and tracking progress. I wanted to create a tool that simplifies and optimizes workout
+        planning, while remaining 100% customizable.
+        This application helps you visualize the muscle groups you're working and maintain a balanced training program.
+    </p>
+</section>
+<br>
+
+<section>
+    <h3>Technologies Used</h3>
+    <ul>
+        <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript, Bootstrap 5</li>
+        <li><strong>Backend:</strong> Django (Python)</li>
+        <li><strong>Database:</strong> PostgreSQL with Django ORM</li>
+        <li><strong>Hosting:</strong> Render.com</li>
+        <li><strong>Version Control:</strong> Git & GitHub</li>
+    </ul>
+</section>
+<br>
+
+<section>
+    <h3>About Me</h3>
+    <p>My name is Damien, I'm a Full Stack development student in Dublin, and I'm currently learning web development.
+        This project combines my passion for fitness with acquiring web development skills.</p>
+</section>
+<br>
+
+<section>
+    <h3>My Other Projects</h3>
+    <p>
+        <a href="https://damien62-dev.github.io/Assignment-module-1/index.html" target="_blank"
+            rel="noopener noreferrer">Damien Running Coach</a>
+    </p>
+    <p>
+        <a href="https://damien62-dev.github.io/Assignment-module-2" target="_blank" rel="noopener noreferrer">The Pong
+            Hub - Interactive Table Tennis Web Application</a>
+    </p>
 </section>
 {% endblock %}
