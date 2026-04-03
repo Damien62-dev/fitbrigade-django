@@ -7,6 +7,7 @@ urlpatterns = [
     path('', include('users.urls', namespace='users')),
     path('', include('workouts.urls', namespace='workouts')),
     path('goals/', include('goals.urls', namespace='goals')),
+    path('inbox/', include('messaging.urls', namespace='messaging')),
 
     # Password reset — top level, pas dans le namespace users
     path('password-reset/',

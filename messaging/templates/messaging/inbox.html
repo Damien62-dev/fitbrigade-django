@@ -1,0 +1,57 @@
+<!-- filepath: inbox.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inbox - FitBrigade{% endblock %}
+
+{% block content %}
+<div class="header-row">
+    <h2><i class="bi bi-inbox"></i> Inbox</h2>
+    <a href="{% url 'messaging:send_message' %}" class="btn btn-primary">
+        <i class="bi bi-send"></i> New Message
+    </a>
+</div>
+<br>
+
+{% if messages_list %}
+<div class="stats-list">
+    {% for message in messages_list %}
+    <div class="stat-row {% if not message.is_read %}unread{% endif %}">
+        <div>
+            {% if not message.is_read %}
+            <span class="badge bg-primary me-2">New</span>
+            {% endif %}
+            <a href="{% url 'messaging:view_message' message.id %}" class="message-link">
+                {{ message.subject }}
+            </a>
+            <br>
+            <small class="text-muted">From: {{ message.sender.username }} — {{ message.created_at|date:"d M Y H:i" }}</small>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'messaging:view_message' message.id %}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-eye"></i> Read
+            </a>
+            <a href="{% url 'messaging:archive_message' message.id %}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-archive"></i> Archive
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-message">
+    <i class="bi bi-inbox" style="font-size: 3rem; color: var(--secondary-color);"></i>
+    <p class="mt-3">Your inbox is empty.</p>
+    <br>
+    <a href="{% url 'messaging:send_message' %}" class="btn btn-primary">
+        <i class="bi bi-send"></i> Send a Message
+    </a>
+</div>
+{% endif %}
+
+<br>
+<a href="{% url 'messaging:sent_messages' %}" class="back-link">
+    <i class="bi bi-send"></i> View Sent Messages
+</a>
+{% endblock %}

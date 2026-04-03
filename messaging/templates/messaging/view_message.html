@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ message.subject }} - FitBrigade{% endblock %}
+
+{% block content %}
+<a href="{% url 'messaging:inbox' %}" class="back-link">← Back to Inbox</a>
+<br><br>
+
+<div class="detail-card">
+    <h2>{{ message.subject }}</h2>
+    <p style="color: var(--secondary-color); font-size: 0.9rem;">
+        From: <strong>{{ message.sender.username }}</strong> —
+        {{ message.created_at|date:"d M Y H:i" }}
+    </p>
+    <br>
+
+    <div class="notes">
+        {{ message.body|linebreaks }}
+    </div>
+
+    <br>
+
+    <div class="detail-actions">
+        <a href="{% url 'messaging:inbox' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+        <a href="{% url 'messaging:send_message' %}" class="btn btn-primary">
+            <i class="bi bi-reply"></i> Reply
+        </a>
+        <a href="{% url 'messaging:archive_message' message.id %}" class="btn btn-outline-secondary">
+            <i class="bi bi-archive"></i> Archive
+        </a>
+    </div>
+</div>
+{% endblock %}

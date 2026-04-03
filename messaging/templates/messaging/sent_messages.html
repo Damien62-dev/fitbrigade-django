@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sent Messages - FitBrigade{% endblock %}
+
+{% block content %}
+<div class="header-row">
+    <h2><i class="bi bi-send"></i> Sent Messages</h2>
+    <a href="{% url 'messaging:send_message' %}" class="btn btn-primary">
+        <i class="bi bi-send"></i> New Message
+    </a>
+</div>
+<br>
+
+{% if messages_list %}
+<div class="stats-list">
+    {% for message in messages_list %}
+    <div class="stat-row">
+        <div>
+            <span style="color: var(--dark-color); font-weight: 500;">{{ message.subject }}</span>
+            <br>
+            <small class="text-muted">To: {{ message.recipient.username }} — {{ message.created_at|date:"d M Y H:i" }}</small>
+        </div>
+        <span class="tag">Sent</span>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-message">
+    <p>No sent messages yet.</p>
+    <br>
+    <a href="{% url 'messaging:send_message' %}" class="btn btn-primary">
+        <i class="bi bi-send"></i> Send a Message
+    </a>
+</div>
+{% endif %}
+
+<br>
+<a href="{% url 'messaging:inbox' %}" class="back-link">← Back to Inbox</a>
+{% endblock %}

@@ -91,4 +91,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // ===== Auto-dismiss toasts après 3 secondes =====
+    const toasts = document.querySelectorAll('.toast');
+    toasts.forEach(toast => {
+        setTimeout(() => {
+            const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
+            bsToast.hide();
+        }, 3000);
+    });
 });

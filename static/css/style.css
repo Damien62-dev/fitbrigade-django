@@ -572,6 +572,16 @@ footer p {
     margin: 0;
 }
 
+.unread {
+    font-weight: bold;
+}
+
+.message-link {
+    text-decoration: none;
+    color: var(--dark-color);
+}
+
+
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
     .hero {
