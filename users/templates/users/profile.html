@@ -1,9 +1,31 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+
+{% block title %}Profile - FitBrigade{% endblock %}
+
 {% block content %}
-<div class="content-section">
-    <h2>{{ user.username }} - Profile</h2>
-    <br>
-    {% crispy form %}
+<div class="detail-card">
+    <div class="d-flex align-items-center mb-4">
+        <img class="rounded-circle me-3" src="{{ user.profile.image.url }}" alt="Profile picture"
+            style="width: 80px; height: 80px; object-fit: cover;">
+        <div>
+            <h2 class="mb-0">{{ user.username }}</h2>
+            <p class="text-muted mb-0">{{ user.email }}</p>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+        </fieldset>
+        <div class="form-group mt-3">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-save"></i> Update Profile
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock content %}

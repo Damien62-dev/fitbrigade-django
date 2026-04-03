@@ -99,4 +99,32 @@ document.addEventListener('DOMContentLoaded', function () {
             bsToast.hide();
         }, 3000);
     });
+
+    // ===== Real-time form validation =====
+    const forms = document.querySelectorAll('form:not(.d-inline)');
+    forms.forEach(form => {
+        const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+
+        inputs.forEach(input => {
+            // Validation on input (real-time)
+            input.addEventListener('input', function () {
+                validateInput(this);
+            });
+
+            // Validation on blur (when leaving field)
+            input.addEventListener('blur', function () {
+                validateInput(this);
+            });
+        });
+    });
+
+    function validateInput(input) {
+        if (input.value.trim() === '') {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+        } else {
+            input.classList.add('is-valid');
+            input.classList.remove('is-invalid');
+        }
+    }
 });
