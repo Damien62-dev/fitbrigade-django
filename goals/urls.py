@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/', views.create_goal, name='create_goal'),
     path('edit/<int:goal_id>/', views.edit_goal, name='edit_goal'),
     path('delete/<int:goal_id>/', views.delete_goal, name='delete_goal'),
+    path('complete/<int:goal_id>/', views.complete_goal, name='complete_goal'),
 ]

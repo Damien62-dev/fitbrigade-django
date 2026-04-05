@@ -20,6 +20,14 @@
         <h3>{{ least_trained }}</h3>
         <p>Least Trained Muscle</p>
     </div>
+    <div class="stat-box">
+        <h3>{{ completed_goals }}</h3>
+        <p>Goals Achieved 🎉</p>
+    </div>
+    <div class="stat-box">
+        <h3>{{ total_goals }}</h3>
+        <p>Total Goals</p>
+    </div>
 </div>
 <br><br>
 
@@ -38,7 +46,7 @@
 <div class="empty-message">
     <p>No workout data yet. Start logging your sessions!</p>
     <br>
-    <a href="{% url 'workouts:create_workout' %}" class="btn-primary">Create Workout</a>
+    <a href="{% url 'workouts:create_workout' %}" class="btn btn-primary">Create Workout</a>
 </div>
 {% endif %}
 

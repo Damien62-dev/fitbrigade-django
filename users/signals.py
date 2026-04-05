@@ -3,6 +3,14 @@ from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from .models import Profile
 
+"""
+users/signals.py
+
+Django signals to automatically create and save a Profile
+when a new user registers. This ensures every user always
+has an associated Profile without manual intervention.
+"""
+
 User = get_user_model()
 
 

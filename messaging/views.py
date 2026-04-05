@@ -1,8 +1,7 @@
-# messaging/views.py - à compléter dans les prochaines sessions
 """
 messaging/views.py
 
-Inbox system: send, receive, archive messages between users.
+Inbox system: send, receive, and archive messages between users.
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -16,7 +15,10 @@ User = get_user_model()
 
 @login_required
 def inbox(request):
-    """Display received messages for the logged-in user."""
+    """
+    Display the inbox for the logged-in user.
+    Shows all received messages that have not been archived.
+    """
     received = Message.objects.filter(
         recipient=request.user,
         is_archived=False
@@ -26,14 +28,21 @@ def inbox(request):
 
 @login_required
 def sent_messages(request):
-    """Display sent messages for the logged-in user."""
+    """
+    Display all messages sent by the logged-in user.
+    Ordered by most recent first.
+    """
     sent = Message.objects.filter(sender=request.user)
     return render(request, 'messaging/sent_messages.html', {'messages_list': sent})
 
 
 @login_required
 def send_message(request):
-    """Send a new message to another user."""
+    """
+    Handle sending a new message to another user.
+    GET: Display the message composition form with a list of available recipients.
+    POST: Validate and save the message, then redirect to inbox.
+    """
     users = User.objects.exclude(id=request.user.id)
 
     if request.method == 'POST':
@@ -60,7 +69,11 @@ def send_message(request):
 
 @login_required
 def view_message(request, message_id):
-    """View a single message and mark it as read."""
+    """
+    Display a single message and mark it as read.
+    Automatically sets is_read to True on first view.
+    Returns 404 if the message does not belong to the logged-in user.
+    """
     message = get_object_or_404(Message, id=message_id, recipient=request.user)
     if not message.is_read:
         message.is_read = True
@@ -70,7 +83,11 @@ def view_message(request, message_id):
 
 @login_required
 def archive_message(request, message_id):
-    """Archive a message."""
+    """
+    Archive a message by setting is_archived to True.
+    Archived messages are hidden from the main inbox.
+    Returns 404 if the message does not belong to the logged-in user.
+    """
     message = get_object_or_404(Message, id=message_id, recipient=request.user)
     message.is_archived = True
     message.save()

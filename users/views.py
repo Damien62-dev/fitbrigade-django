@@ -5,6 +5,11 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 def register(request):
+    """
+    Handle new user registration.
+    GET: Display the registration form.
+    POST: Validate and save the new user, then redirect to login page.
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -19,6 +24,12 @@ def register(request):
 
 @login_required
 def profile(request):
+    """
+    Display and handle updates to the user profile.
+    GET: Display the profile form pre-populated with current user data and profile picture.
+    POST: Validate and save both user info (UserUpdateForm) and profile picture (ProfileUpdateForm).
+    Uses Post/Redirect/Get pattern to prevent duplicate form submissions on page reload.
+    """
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)

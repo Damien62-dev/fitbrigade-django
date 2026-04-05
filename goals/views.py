@@ -7,18 +7,31 @@ from workouts.models import Exercise, MuscleGroup
 
 @login_required
 def goals_list(request):
+    """
+    Display all goals for the logged-in user.
+    Goals are ordered by deadline and creation date.
+    """
     goals = Goal.objects.filter(user=request.user)
     return render(request, 'goals/goals.html', {'goals': goals})
 
 
 @login_required
 def goal_detail(request, goal_id):
+    """
+    Display full details of a single goal.
+    Returns 404 if the goal does not belong to the logged-in user.
+    """
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
     return render(request, 'goals/goal_detail.html', {'goal': goal})
 
 
 @login_required
 def create_goal(request):
+    """
+    Handle creation of a new fitness goal.
+    GET: Display the goal creation form with optional exercise selection.
+    POST: Validate and save the goal with optional fields (deadline, exercise, targets).
+    """
     muscle_groups = MuscleGroup.objects.all()
     exercises_by_muscle = {}
     for mg in muscle_groups:
@@ -61,6 +74,12 @@ def create_goal(request):
 
 @login_required
 def edit_goal(request, goal_id):
+    """
+    Handle editing of an existing goal.
+    GET: Display the edit form pre-populated with current goal data.
+    POST: Validate and save the updated goal fields.
+    Returns 404 if the goal does not belong to the logged-in user.
+    """
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
     muscle_groups = MuscleGroup.objects.all()
     exercises_by_muscle = {}
@@ -93,7 +112,56 @@ def edit_goal(request, goal_id):
 
 @login_required
 def delete_goal(request, goal_id):
+    """
+    Delete a goal permanently.
+    Returns 404 if the goal does not belong to the logged-in user.
+    """
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
     goal.delete()
     messages.success(request, 'Goal deleted successfully!')
     return redirect('goals:goals_list')
+
+@login_required
+def complete_goal(request, goal_id):
+    """
+    Mark a goal as completed.
+    Sets is_completed to True and redirects to goals list.
+    Returns 404 if the goal does not belong to the logged-in user.
+    """
+    goal = get_object_or_404(Goal, id=goal_id, user=request.user)
+    goal.is_completed = True
+    goal.save()
+    messages.success(request, f'🎉 Congratulations! Goal "{goal.name}" completed!')
+    return redirect('goals:goals_list')
+
+@login_required
+def stats(request):
+    """
+    Display workout statistics for the logged-in user.
+    Calculates total workouts, most and least trained muscle groups,
+    and number of completed goals.
+    """
+    from goals.models import Goal
+    
+    workouts = Workout.objects.filter(user=request.user)
+    total_workouts = workouts.count()
+
+    muscle_counts = {}
+    for workout in workouts:
+        for mg in workout.muscle_groups.all():
+            muscle_counts[mg.name] = muscle_counts.get(mg.name, 0) + 1
+
+    most_trained = max(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
+    least_trained = min(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
+    
+    total_goals = Goal.objects.filter(user=request.user).count()
+    completed_goals = Goal.objects.filter(user=request.user, is_completed=True).count()
+
+    return render(request, 'workouts/stats.html', {
+        'total_workouts': total_workouts,
+        'most_trained': most_trained,
+        'least_trained': least_trained,
+        'muscle_stats': muscle_counts,
+        'total_goals': total_goals,
+        'completed_goals': completed_goals,
+    })

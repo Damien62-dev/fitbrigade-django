@@ -3,7 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Workout, MuscleGroup, Exercise, WorkoutMuscleGroup, WorkoutExercise
 
+
 def index(request):
+    """
+    Public landing page for FitBrigade.
+    Redirects authenticated users to their workout dashboard.
+    """
     if request.user.is_authenticated:
         return redirect('workouts:home')
     return render(request, 'workouts/index.html')
@@ -11,12 +16,21 @@ def index(request):
 
 @login_required
 def home(request):
+    """
+    Display all workouts for the logged-in user.
+    Workouts are ordered by date, most recent first.
+    """
     workouts = Workout.objects.filter(user=request.user).order_by('-date')
     return render(request, 'workouts/home.html', {'workouts': workouts})
 
 
 @login_required
 def workout_detail(request, workout_id):
+    """
+    Display full details of a single workout.
+    Exercises are grouped by muscle group for display.
+    Returns 404 if the workout does not belong to the logged-in user.
+    """
     workout = get_object_or_404(Workout, id=workout_id, user=request.user)
     muscle_groups = workout.muscle_groups.all()
     workout_exercises = WorkoutExercise.objects.filter(workout=workout)
@@ -41,6 +55,11 @@ def workout_detail(request, workout_id):
 
 @login_required
 def create_workout(request):
+    """
+    Handle creation of a new workout.
+    GET: Display the workout creation form with all muscle groups and exercises.
+    POST: Validate and save the workout, associated muscle groups and exercises.
+    """
     muscle_groups = MuscleGroup.objects.all()
     exercises_by_muscle = {}
     for mg in muscle_groups:
@@ -95,6 +114,12 @@ def create_workout(request):
 
 @login_required
 def edit_workout(request, workout_id):
+    """
+    Handle editing of an existing workout.
+    GET: Display the edit form pre-populated with current workout data.
+    POST: Delete existing muscle groups and exercises, then save updated ones.
+    Returns 404 if the workout does not belong to the logged-in user.
+    """
     workout = get_object_or_404(Workout, id=workout_id, user=request.user)
     muscle_groups = MuscleGroup.objects.all()
     exercises_by_muscle = {}
@@ -158,6 +183,10 @@ def edit_workout(request, workout_id):
 
 @login_required
 def delete_workout(request, workout_id):
+    """
+    Delete a workout and all associated muscle groups and exercises.
+    Returns 404 if the workout does not belong to the logged-in user.
+    """
     workout = get_object_or_404(Workout, id=workout_id, user=request.user)
     WorkoutMuscleGroup.objects.filter(workout=workout).delete()
     WorkoutExercise.objects.filter(workout=workout).delete()
@@ -168,6 +197,13 @@ def delete_workout(request, workout_id):
 
 @login_required
 def stats(request):
+    """
+    Display workout statistics for the logged-in user.
+    Calculates total workouts, most and least trained muscle groups,
+    and number of completed goals.
+    """
+    from goals.models import Goal
+
     workouts = Workout.objects.filter(user=request.user)
     total_workouts = workouts.count()
 
@@ -179,13 +215,19 @@ def stats(request):
     most_trained = max(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
     least_trained = min(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
 
+    total_goals = Goal.objects.filter(user=request.user).count()
+    completed_goals = Goal.objects.filter(user=request.user, is_completed=True).count()
+
     return render(request, 'workouts/stats.html', {
         'total_workouts': total_workouts,
         'most_trained': most_trained,
         'least_trained': least_trained,
-        'muscle_stats': muscle_counts
+        'muscle_stats': muscle_counts,
+        'total_goals': total_goals,
+        'completed_goals': completed_goals,
     })
 
 
 def about(request):
+    """Display the about page with project information."""
     return render(request, 'workouts/about.html')

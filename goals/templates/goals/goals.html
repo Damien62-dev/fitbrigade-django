@@ -11,12 +11,18 @@
 <br>
 
 {% if goals %}
+
+{% with active_goals=goals|dictsort:"name" %}
+
+<!-- Active Goals -->
+<h4>Active Goals</h4>
+<br>
 <div class="workout-list">
     {% for goal in goals %}
+    {% if not goal.is_completed %}
     <div class="workout-card">
         <h3>{{ goal.name }}</h3>
         <p class="date">Deadline: {{ goal.deadline|date:"d M Y"|default:"No deadline" }}</p>
-
         <div class="muscle-tags">
             {% if goal.exercise %}
             <span class="tag">{{ goal.exercise.name }}</span>
@@ -28,20 +34,61 @@
             <span class="tag">{{ goal.target_reps }} reps</span>
             {% endif %}
         </div>
-<div class="card-actions">
-    <a href="{% url 'goals:goal_detail' goal.id %}" class="btn btn-secondary btn-sm">
-        <i class="bi bi-eye"></i> View
-    </a>
-    <a href="{% url 'goals:edit_goal' goal.id %}" class="btn btn-primary btn-sm">
-        <i class="bi bi-pencil"></i> Edit
-    </a>
-    <a href="{% url 'goals:delete_goal' goal.id %}" class="btn btn-danger btn-sm">
-        <i class="bi bi-trash"></i> Delete
-    </a>
-</div>
+        <div class="card-actions flex-wrap">
+            <a href="{% url 'goals:goal_detail' goal.id %}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-eye"></i>
+            </a>
+            <a href="{% url 'goals:edit_goal' goal.id %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{% url 'goals:complete_goal' goal.id %}" class="btn btn-success btn-sm">
+                <i class="bi bi-check-circle"></i>
+            </a>
+            <a href="{% url 'goals:delete_goal' goal.id %}" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i>
+            </a>
+        </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
+
+<br>
+
+<!-- Completed Goals -->
+<h4>Completed Goals</h4>
+<br>
+<div class="workout-list">
+    {% for goal in goals %}
+    {% if goal.is_completed %}
+    <div class="workout-card" style="opacity: 0.7;">
+        <h3>✅ {{ goal.name }}</h3>
+        <p class="date">Deadline: {{ goal.deadline|date:"d M Y"|default:"No deadline" }}</p>
+        <div class="muscle-tags">
+            {% if goal.exercise %}
+            <span class="tag">{{ goal.exercise.name }}</span>
+            {% endif %}
+            {% if goal.target_weight %}
+            <span class="tag">{{ goal.target_weight }} kg</span>
+            {% endif %}
+            {% if goal.target_reps %}
+            <span class="tag">{{ goal.target_reps }} reps</span>
+            {% endif %}
+        </div>
+        <div class="card-actions">
+            <a href="{% url 'goals:goal_detail' goal.id %}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-eye"></i> View
+            </a>
+            <a href="{% url 'goals:delete_goal' goal.id %}" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endwith %}
 
 {% else %}
 <div class="empty-message">

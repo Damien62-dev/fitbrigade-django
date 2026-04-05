@@ -41,6 +41,7 @@ class Goal(models.Model):
     deadline = models.DateField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_completed = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['deadline', '-created_at']

@@ -9,6 +9,9 @@
 body {
     font-family: 'Barlow', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--light-bg);
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
 }
 
 h1,
@@ -141,7 +144,7 @@ nav.navbar {
 
 /* ===== Main ===== */
 main {
-    min-height: 70vh;
+    flex: 1 !important;
     padding: 30px 0;
 }
 
@@ -565,7 +568,7 @@ footer {
     color: white;
     text-align: center;
     padding: 20px 0;
-    margin-top: 50px;
+    margin-top: auto;
 }
 
 footer p {
@@ -580,7 +583,6 @@ footer p {
     text-decoration: none;
     color: var(--dark-color);
 }
-
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
