@@ -1,0 +1,19 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+db.sqlite3
+staticfiles/
+
+# Media — keep default.png only
+media/*
+!media/.gitkeep
+!media/default.png
+
+# Virtual environment
+.venv/
