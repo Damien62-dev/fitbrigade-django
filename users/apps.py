@@ -5,4 +5,4 @@ class UsersConfig(AppConfig):
     name = 'users'
 
     def ready(self):
-        import users.signals  # noqa - # noqa - we need to import signals here to avoid a circular dependency
+        import users.signals # noqa - we need to import signals here to avoid a circular dependency
