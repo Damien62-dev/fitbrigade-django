@@ -151,7 +151,7 @@ main {
 /* ===== Hero ===== */
 .hero {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url('/static/images/hero-bg.jpg');
+        url("/static/images/hero-bg.fca2aa221c15.jpg");
     background-size: 70%;
     background-position: center top;
     background-attachment: fixed;
