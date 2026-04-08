@@ -107,6 +107,10 @@ DEBUG=False
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 ```
 
+**Note on Password Reset:** The password reset feature is fully implemented and functional in local development. 
+On Render's free tier, outbound SMTP connections (ports 25, 465, 587) are blocked, preventing email delivery. 
+A production fix would require replacing SMTP with an HTTP-based email provider such as Resend or SendGrid.
+
 ## Running Tests
 ```bash
 python3 manage.py test
