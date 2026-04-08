@@ -7,13 +7,12 @@
 {% block content %}
 <div class="detail-card">
     <div class="d-flex align-items-center mb-4">
-        <img class="rounded-circle me-3"
-            src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
-            alt="Profile picture" style="width: 80px; height: 80px; object-fit: cover;">
-        <div>
-            <h2 class="mb-0">{{ user.username }}</h2>
-            <p class="text-muted mb-0">{{ user.email }}</p>
-        </div>
+        <<img class="rounded-circle me-3" src="{% static 'images/default.png' %}" alt="Profile picture"
+            style="width: 80px; height: 80px; object-fit: cover;">">
+            <div>
+                <h2 class="mb-0">{{ user.username }}</h2>
+                <p class="text-muted mb-0">{{ user.email }}</p>
+            </div>
     </div>
 
     <form method="POST" enctype="multipart/form-data">
