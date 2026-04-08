@@ -50,17 +50,13 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
     def save(self, *args, **kwargs):
-        """
-        Override save to resize profile images larger than 300px.
-        Keeps aspect ratio using Pillow's thumbnail method.
-        On Render.com, image files may not be accessible — errors are caught silently.
-        """
         super().save(*args, **kwargs)
         try:
-            from PIL import Image
-            with Image.open(self.image.path) as img:
-                if img.height > 300 or img.width > 300:
-                    img.thumbnail((300, 300))
-                    img.save(self.image.path)
-        except (FileNotFoundError, OSError):
+            if self.image and self.image.name:
+                from PIL import Image
+                with Image.open(self.image.path) as img:
+                    if img.height > 300 or img.width > 300:
+                        img.thumbnail((300, 300))
+                        img.save(self.image.path)
+        except (FileNotFoundError, OSError, ValueError):
             pass
