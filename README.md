@@ -71,16 +71,8 @@ cp .env.example .env
 python3 manage.py migrate
 
 # Seed the database (muscle groups and exercises)
-python3 manage.py shell
-```
+python3 manage.py seed_db
 
-In the Django shell, run:
-```python
-from workouts.models import MuscleGroup, Exercise
-# (paste seeding script here)
-exit()
-```
-```bash
 # Create a superuser
 python3 manage.py createsuperuser
 
@@ -107,9 +99,7 @@ DEBUG=False
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 ```
 
-**Note on Password Reset:** The password reset feature is fully implemented and functional in local development. 
-On Render's free tier, outbound SMTP connections (ports 25, 465, 587) are blocked, preventing email delivery. 
-A production fix would require replacing SMTP with an HTTP-based email provider such as Resend or SendGrid.
+> **Note on Password Reset:** The password reset feature is fully implemented and functional in local development. On Render's free tier, outbound SMTP connections (ports 25, 465, 587) are blocked, preventing email delivery. A production fix would require replacing SMTP with an HTTP-based email provider such as Resend or SendGrid.
 
 ## Running Tests
 ```bash
@@ -122,7 +112,7 @@ python3 manage.py test
 
 1. Create a new **Web Service** on Render.com
 2. Connect your GitHub repository
-3. Set **Build Command:** `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+3. Set **Build Command:** `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py seed_db && python manage.py ensure_adminuser`
 4. Set **Start Command:** `gunicorn fitbrigade_project.wsgi:application --bind 0.0.0.0:$PORT`
 5. Add environment variables in the Render dashboard:
    - `SECRET_KEY`
@@ -131,9 +121,11 @@ python3 manage.py test
    - `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`
    - `EMAIL_HOST_USER`
    - `EMAIL_HOST_PASSWORD`
+   - `DJANGO_SUPERUSER_USERNAME`
+   - `DJANGO_SUPERUSER_EMAIL`
+   - `DJANGO_SUPERUSER_PASSWORD`
 
 ## Project Structure
-
 fitbrigade_django_final/
 ├── fitbrigade_project/     # Django project settings
 ├── users/                  # Authentication, profiles, signals

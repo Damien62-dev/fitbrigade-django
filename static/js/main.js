@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.toggleExerciseDetails = toggleExerciseDetails;
 
     // Confirm before deleting a workout
-    const deleteWorkoutLinks = document.querySelectorAll('a[href*="/delete/"]');
+    const deleteWorkoutLinks = document.querySelectorAll('a[href*="/workout/"][href*="/delete/"]');
     deleteWorkoutLinks.forEach(link => {
         link.addEventListener('click', function (event) {
             if (!confirm('Are you sure you want to delete this workout? This action cannot be undone.')) {
