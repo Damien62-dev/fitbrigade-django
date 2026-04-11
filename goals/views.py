@@ -134,34 +134,3 @@ def complete_goal(request, goal_id):
     messages.success(request, f'🎉 Congratulations! Goal "{goal.name}" completed!')
     return redirect('goals:goals_list')
 
-@login_required
-def stats(request):
-    """
-    Display workout statistics for the logged-in user.
-    Calculates total workouts, most and least trained muscle groups,
-    and number of completed goals.
-    """
-    from goals.models import Goal
-    
-    workouts = Workout.objects.filter(user=request.user)
-    total_workouts = workouts.count()
-
-    muscle_counts = {}
-    for workout in workouts:
-        for mg in workout.muscle_groups.all():
-            muscle_counts[mg.name] = muscle_counts.get(mg.name, 0) + 1
-
-    most_trained = max(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
-    least_trained = min(muscle_counts, key=muscle_counts.get) if muscle_counts else 'N/A'
-    
-    total_goals = Goal.objects.filter(user=request.user).count()
-    completed_goals = Goal.objects.filter(user=request.user, is_completed=True).count()
-
-    return render(request, 'workouts/stats.html', {
-        'total_workouts': total_workouts,
-        'most_trained': most_trained,
-        'least_trained': least_trained,
-        'muscle_stats': muscle_counts,
-        'total_goals': total_goals,
-        'completed_goals': completed_goals,
-    })
