@@ -2,6 +2,8 @@
 
 A Django web application for planning and tracking workout routines, built as part of the UCD Professional Academy Full Stack Developer Diploma.
 
+**Live Application:** https://fitbrigade-django.onrender.com
+
 ## Overview
 
 FitBrigade allows users to create and manage personalised workout sessions, set fitness goals, track progress through statistics, and communicate with other users via an inbox system.
